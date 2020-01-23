@@ -1,0 +1,39 @@
+{
+   "name": "matrix",
+   "version": "1.0.0",
+   "description": "matrix function library",
+   "main": "dist/matrix.js",
+   "types": "dist/matrix.d.ts",
+   "scripts": {
+      "test": "karma start karma.conf.js",
+      "clean": "rm -rf dist",
+      "start": "webpack-dev-server --watch --config webpack.dev.config.js",
+      "build": "npm run build:dev",
+      "build:dev": "npm run clean && npm run buildWebpack:dev",
+      "build:prd": "npm run clean && npm run buildWebpack:prd",
+      "buildWebpack:prd": "webpack --mode=production",
+      "buildWebpack:dev": "webpack --config webpack.dev.config.js",
+      "postinstall": "npm run build:dev"
+   },
+   "author": "merlek",
+   "license": "ISC",
+   "devDependencies": {
+      "@types/jasmine": "^3.5.1",
+      "karma": "^4.4.1",
+      "karma-chrome-launcher": "^3.1.0",
+      "karma-jasmine": "^3.1.0",
+      "karma-spec-reporter": "0.0.32",
+      "karma-webpack": "^4.0.2",
+      "ts-loader": "^6.2.1",
+      "ts-node": "^8.6.2",
+      "tslint": "^5.20.1",
+      "typescript": "^3.7.5",
+      "webpack": "^4.41.5",
+      "webpack-cli": "^3.3.10",
+      "webpack-dev-server": "^3.10.1"
+   },
+   "dependencies": {
+      "@types/node": "^13.1.6",
+      "common": "file:../common"
+   }
+}
