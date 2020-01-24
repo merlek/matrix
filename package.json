@@ -6,6 +6,7 @@
    "types": "dist/matrix.d.ts",
    "scripts": {
       "test": "karma start karma.conf.js",
+      "test-watch": "karma start karma.conf.js --single-run false",
       "clean": "rm -rf dist",
       "start": "webpack-dev-server --watch --config webpack.dev.config.js",
       "build": "npm run build:dev",
@@ -33,7 +34,7 @@
    "license": "ISC",
    "dependencies": {
       "@types/node": "^13.1.6",
-      "utility-functions": "merlek/utility-functions#f238cdd"
+      "utility-functions": "merlek/utility-functions#e7a909b"
    },
    "devDependencies": {
       "@types/jasmine": "^3.5.1",

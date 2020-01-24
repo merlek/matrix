@@ -4,7 +4,7 @@ module.exports = {
    entry: {
       matrix: ['./src/matrix.ts', './src/vector.ts']
    },
-   devtool: 'source-map',
+   devtool: 'inline-source-map',
    mode: 'development',
    module: {
       rules: [

@@ -1,8 +1,13 @@
-import { repeat, random, dropFirst } from 'utility-functions';
+import { dropFirst, random, repeat } from 'utility-functions';
+
+export function toRadians(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
 
 export class Vector {
   [key: number]: number;
   private readonly values: ReadonlyArray<number>;
+  private _magnitude?: number;
   static create(x: number = 0, y: number = 0, ...others: number[]): Vector {
     return new Vector(x, y, ...others);
   }
@@ -15,16 +20,23 @@ export class Vector {
   private constructor(...values: number[]) {
     this.values = [...values];
   }
-  get length() {
+  get magnitude(): number {
+    return this._magnitude != null
+      ? this._magnitude
+      : (this._magnitude = Math.sqrt(
+          this.values.reduce((acc, value) => acc + Math.pow(value, 2), 0)
+        ));
+  }
+  get length(): number {
     return this.values.length;
   }
-  get x() {
+  get x(): number {
     return this.values[0];
   }
-  get y() {
+  get y(): number {
     return this.values[1];
   }
-  get z() {
+  get z(): number {
     return this.values[2];
   }
   public normalize(): Vector {
@@ -38,23 +50,14 @@ export class Vector {
   }
   public setMag(magnitude?: number): Vector {
     if (magnitude != null) {
-      const mag = this.getMag();
-      const values: number[] = [];
-      for (let i = 0; i < this.values.length; i++) {
-        values[i] = (this.values[i] / mag) * magnitude;
-      }
-      return new Vector(...values);
+      const curMag = this.magnitude;
+      return new Vector(...this.values.map(v => (v / curMag) * magnitude));
     } else {
       return this;
     }
   }
-  public getMag(): number {
-    return Math.sqrt(
-      this.values.reduce((acc, value) => acc + Math.pow(value, 2), 0)
-    );
-  }
   public limit(max: number): Vector {
-    if (this.getMag() > max) {
+    if (this.magnitude > max) {
       return this.setMag(max);
     }
     return this;
@@ -85,9 +88,13 @@ export class Vector {
 
     return diff.subtract(...dropFirst(vs));
   }
-  public mult(n: number): Vector {
+  public mult(n: number, ...ns: number[]): Vector {
+    n *= ns.length > 0 ? ns.reduce((acc, c) => acc * c, 1) : 1;
     return new Vector(...this.values.map(v => v * n));
   }
+  /**
+   * @returns a value θ: −π < θ ≤ π
+   */
   public heading(): number {
     return Math.atan2(this.y, this.x);
   }
@@ -95,21 +102,6 @@ export class Vector {
     return new Vector(...this.values);
   }
   public dotProduct(b: Vector): number {
-    let c = 0;
-
-    for (let i = 0; i < this.values.length; i++) {
-      c += this.values[i] * b.values[i];
-    }
-
-    return c;
+    return this.values.reduce((acc, value, i) => acc + value * b.values[i], 0);
   }
-  //   set x(n: number) {
-  //     this.values[0] = n;
-  //   }
-  //   set y(n: number) {
-  //     this.values[1] = n;
-  //   }
-  //   set z(n: number) {
-  //     this.values[2] = n;
-  //   }
 }
