@@ -27,6 +27,9 @@ export class Vector {
           this.values.reduce((acc, value) => acc + Math.pow(value, 2), 0)
         ));
   }
+  get heading(): number {
+   return Math.atan2(this.y, this.x);
+ }
   get length(): number {
     return this.values.length;
   }
@@ -95,9 +98,7 @@ export class Vector {
   /**
    * @returns a value θ: −π < θ ≤ π
    */
-  public heading(): number {
-    return Math.atan2(this.y, this.x);
-  }
+
   public copy(): Vector {
     return new Vector(...this.values);
   }

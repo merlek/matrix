@@ -8,6 +8,7 @@ export declare class Vector {
     static random2D(maxforce?: number): Vector;
     private constructor();
     get magnitude(): number;
+    get heading(): number;
     get length(): number;
     get x(): number;
     get y(): number;
@@ -23,7 +24,6 @@ export declare class Vector {
     /**
      * @returns a value θ: −π < θ ≤ π
      */
-    heading(): number;
     copy(): Vector;
     dotProduct(b: Vector): number;
 }

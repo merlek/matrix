@@ -149,23 +149,23 @@ describe('Vector', () => {
   });
 
   it('heading calculates the angle of a vector from the x axis', () => {
-    expect(v.heading()).toBeLessThanOrEqual(Math.PI);
-    expect(v.heading()).toBeGreaterThan(-Math.PI);
+    expect(v.heading).toBeLessThanOrEqual(Math.PI);
+    expect(v.heading).toBeGreaterThan(-Math.PI);
   });
   it('heading calculates the angle of a vector (1,0) from the x axis', () => {
-    expect(Vector.create(1, 0).heading()).toBeCloseTo(0, precision);
+    expect(Vector.create(1, 0).heading).toBeCloseTo(0, precision);
   });
   it('heading calculates the angle of a vector (0,1) from the x axis', () => {
-    expect(Vector.create(0, 1).heading()).toBeCloseTo(toRadians(90), precision);
+    expect(Vector.create(0, 1).heading).toBeCloseTo(toRadians(90), precision);
   });
   it('heading calculates the angle of a vector (-1,0) from the x axis', () => {
-    expect(Vector.create(-1, 0).heading()).toBeCloseTo(
+    expect(Vector.create(-1, 0).heading).toBeCloseTo(
       toRadians(180),
       precision
     );
   });
   it('heading calculates the angle of a vector (0,-1) from the x axis', () => {
-    expect(Vector.create(0, -1).heading()).toBeCloseTo(
+    expect(Vector.create(0, -1).heading).toBeCloseTo(
       toRadians(-90),
       precision
     );
