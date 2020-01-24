@@ -6,7 +6,8 @@
    "types": "dist/matrix.d.ts",
    "scripts": {
       "test": "karma start karma.conf.js",
-      "test-watch": "karma start karma.conf.js --single-run false",
+      "test:watch": "npm run test -- --single-run false",
+      "test:matrix": "karma start matrix.karma.conf.js --single-run false",
       "clean": "rm -rf dist",
       "start": "webpack-dev-server --watch --config webpack.dev.config.js",
       "build": "npm run build:dev",

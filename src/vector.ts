@@ -1,4 +1,5 @@
 import { dropFirst, random, repeat } from 'utility-functions';
+import { VectorIterator } from './vector-iterator';
 
 /**
  * Converts from degrees to radians
@@ -8,23 +9,20 @@ import { dropFirst, random, repeat } from 'utility-functions';
 export function toRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
 }
-
 /**
- * A class representation of a immutable mathmatical vector
+ * An immutable mathmatical vector.
  */
-export class Vector {
-  [key: number]: number;
+export class Vector implements Iterable<number> {
   private readonly values: ReadonlyArray<number>;
   private _magnitude?: number;
   /**
    * Creates a Vector from the given values.
    * @param x - x value
-   * @param y - y value
-   * @param others - other values e.g. z
+   * @param others - other values e.g. y, z
    * @returns A new Vector
    */
-  static create(x: number = 0, y: number = 0, ...others: number[]): Vector {
-    return new Vector(x, y, ...others);
+  static create(x: number = 0, ...others: number[]): Vector {
+    return new Vector(x, ...others);
   }
   /**
    * Fills a Vector with a given value `c`.
@@ -45,6 +43,23 @@ export class Vector {
   }
   private constructor(...values: number[]) {
     this.values = [...values];
+  }
+  [Symbol.iterator](): IterableIterator<number> {
+    return this.getIterator();
+  }
+  /**
+   * @returns A iterator for the values in this Vector
+   */
+  public getIterator(): IterableIterator<number> {
+    return new VectorIterator(this);
+  }
+  /**
+   * Returns a value in this Vector.
+   * @param index - the index of the value to return
+   * @returns the value at `index`
+   */
+  public get(index: number) {
+    return this.values[index];
   }
   /**
    * The magnitude of this Vector, i.e. size.

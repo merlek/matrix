@@ -21,26 +21,34 @@ describe('Vector', () => {
     expect(unit).toEqual(u);
   });
 
-  it('Vector.create creates a new vector filled with a value', () => {
-    expect(v.x).toBe(x);
-    expect(v.y).toBe(y);
-    expect(v.length).toBe(2);
-    expect(v.z).toBeUndefined();
+  describe('static', () => {
+    it('Vector.create creates a new vector filled with a value', () => {
+      expect(v.x).toBe(x);
+      expect(v.y).toBe(y);
+      expect(v.length).toBe(2);
+      expect(v.z).toBeUndefined();
+    });
+
+    it('Vector.fill creates a new vector filled with a value', () => {
+      expect(Vector.fill(x, 2)).toEqual(Vector.create(x, x));
+    });
+
+    it('Vector.random2D creates a new random 2D vector', () => {
+      const rnd = Vector.random2D();
+      expect(rnd.magnitude).toBeGreaterThan(0);
+      expect(rnd.length).toBe(2);
+      expect(rnd.z).toBeUndefined();
+    });
   });
 
-  it('Vector.fill creates a new vector filled with a value', () => {
-    expect(Vector.fill(x, 2)).toEqual(Vector.create(x, x));
-  });
-
-  it('Vector.random2D creates a new random 2D vector', () => {
-    const rnd = Vector.random2D();
-    expect(rnd.magnitude).toBeGreaterThan(0);
-    expect(rnd.length).toBe(2);
-    expect(rnd.z).toBeUndefined();
+  it('vector has an iterator', () => {
+    for (const value of zero) {
+      expect(value).toBe(0);
+    }
   });
 
   it('length returns length of a vector', () => {
-    const len = randomInt(0)(100);
+    const len = randomInt(1)(100);
     const array = range(0)(len);
     expect(Vector.create(...array).length).toBe(len);
   });

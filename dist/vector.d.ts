@@ -5,20 +5,18 @@
  */
 export declare function toRadians(degrees: number): number;
 /**
- * A class representation of a immutable mathmatical vector
+ * An immutable mathmatical vector.
  */
-export declare class Vector {
-    [key: number]: number;
+export declare class Vector implements Iterable<number> {
     private readonly values;
     private _magnitude?;
     /**
      * Creates a Vector from the given values.
      * @param x - x value
-     * @param y - y value
-     * @param others - other values e.g. z
+     * @param others - other values e.g. y, z
      * @returns A new Vector
      */
-    static create(x?: number, y?: number, ...others: number[]): Vector;
+    static create(x?: number, ...others: number[]): Vector;
     /**
      * Fills a Vector with a given value `c`.
      * @param c - value to fill with
@@ -33,6 +31,17 @@ export declare class Vector {
      */
     static random2D(magnitude?: number): Vector;
     private constructor();
+    [Symbol.iterator](): IterableIterator<number>;
+    /**
+     * @returns A iterator for the values in this Vector
+     */
+    getIterator(): IterableIterator<number>;
+    /**
+     * Returns a value in this Vector.
+     * @param index - the index of the value to return
+     * @returns the value at `index`
+     */
+    get(index: number): number;
     /**
      * The magnitude of this Vector, i.e. size.
      */

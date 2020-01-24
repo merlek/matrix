@@ -25,7 +25,6 @@ function identity2dArray(dimension: number): number[][] {
 }
 
 export class Matrix {
-  [key: number]: Vector;
   private readonly values: ReadonlyArray<Vector>;
   static create(values: number[][]): Matrix {
     return new Matrix(values.map(v => Vector.create(...v)));
@@ -34,28 +33,29 @@ export class Matrix {
     return Matrix.create(identity2dArray(dimension));
   }
   static rotation(
-    degrees: number,
-    dimension: number,
-    i: number,
-    j: number
-  ): Matrix {
-    const m: number[][] = identity2dArray(dimension);
+    dimension: number = 2,
+    i: number = 0,
+    j: number = 1
+  ): (angle: number) => Matrix {
+    return (angle: number) => {
+      const m: number[][] = identity2dArray(dimension);
 
-    const angle = toRadians(degrees);
+      m[i][i] = m[j][j] = Math.cos(angle);
 
-    m[i][i] = m[j][j] = Math.cos(angle);
-    m[i][j] = -1 * (m[j][i] = Math.sin(angle));
+      m[i][j] = (i + (j % 2) === 0 ? -1 : 1) * Math.sin(angle);
+      m[j][i] = (i + (j % 2) === 0 ? 1 : -1) * Math.sin(angle);
 
-    return Matrix.create(m);
+      return Matrix.create(m);
+    };
   }
-  static rotationX(angle: number, dimension: number = 3): Matrix {
-    return Matrix.rotation(angle, dimension, 1, 2);
+  static rotationX(dimension: number): (angle: number) => Matrix {
+    return Matrix.rotation(dimension, 1, 2);
   }
-  static rotationY(angle: number, dimension: number = 3): Matrix {
-    return Matrix.rotation(angle, dimension, 0, 2);
+  static rotationY(dimension: number): (angle: number) => Matrix {
+    return Matrix.rotation(dimension, 0, 2);
   }
-  static rotationZ(angle: number, dimension: number = 3): Matrix {
-    return Matrix.rotation(angle, dimension, 0, 1);
+  static rotationZ(dimension: number): (angle: number) => Matrix {
+    return Matrix.rotation(dimension, 0, 1);
   }
   private constructor(values: Vector[]) {
     this.values = values.map(v => v.copy());
@@ -66,7 +66,16 @@ export class Matrix {
   get n(): number {
     return this.values[0].length;
   }
-
+  public get(i: number): Vector;
+  public get(i: number, j: number): number;
+  public get(i: number, j?: number): Vector | number {
+    const vector = this.values[i];
+    if (j == null) {
+      return vector;
+    } else {
+      return vector.get(j);
+    }
+  }
   public add(...ms: Matrix[]): Matrix {
     if (ms.length < 1) {
       return this;
@@ -78,7 +87,7 @@ export class Matrix {
       throw dimensionsError(this, b);
     }
 
-    const sum = new Matrix(this.values.map((v, i) => v.add(b[i])));
+    const sum = new Matrix(this.values.map((v, i) => v.add(b.get(i))));
 
     return sum.add(...dropFirst(ms));
   }
@@ -100,7 +109,7 @@ export class Matrix {
     for (let i = 0; i < this.n; i++) {
       values[i] = [];
       for (let j = 0; j < this.m; j++) {
-        values[i][j] = this[j][i];
+        values[i][j] = this.get(j, i);
       }
     }
 
@@ -123,7 +132,7 @@ export class Matrix {
     for (let i = 0; i < this.m; i++) {
       c[i] = [];
       for (let j = 0; j < b.n; j++) {
-        c[i][j] = this[i].dotProduct(bt[j]);
+        c[i][j] = this.values[i].dotProduct(bt.get(j));
       }
     }
 
