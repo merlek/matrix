@@ -1,25 +1,54 @@
 import { dropFirst, random, repeat } from 'utility-functions';
 
+/**
+ * Converts from degrees to radians
+ * @param degrees - angle in degrees to be converted
+ * @returns The angle in radians
+ */
 export function toRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
 }
 
+/**
+ * A class representation of a immutable mathmatical vector
+ */
 export class Vector {
   [key: number]: number;
   private readonly values: ReadonlyArray<number>;
   private _magnitude?: number;
+  /**
+   * Creates a Vector from the given values.
+   * @param x - x value
+   * @param y - y value
+   * @param others - other values e.g. z
+   * @returns A new Vector
+   */
   static create(x: number = 0, y: number = 0, ...others: number[]): Vector {
     return new Vector(x, y, ...others);
   }
+  /**
+   * Fills a Vector with a given value `c`.
+   * @param c - value to fill with
+   * @param length - number of times to repeat `c` in Vector
+   * @returns A new Vector
+   */
   static fill(c: number, length: number): Vector {
     return new Vector(...repeat(c)(length));
   }
-  static random2D(maxforce?: number): Vector {
-    return new Vector(1, 0).rotate(random(0)(Math.PI * 2)).setMag(maxforce);
+  /**
+   * Creates a random 2D Vector.
+   * @param magnitude - optional value for the Vector's magnitude
+   * @returns A new Vector
+   */
+  static random2D(magnitude?: number): Vector {
+    return new Vector(1, 0).rotate(random(0)(Math.PI * 2)).setMag(magnitude);
   }
   private constructor(...values: number[]) {
     this.values = [...values];
   }
+  /**
+   * The magnitude of this Vector, i.e. size.
+   */
   get magnitude(): number {
     return this._magnitude != null
       ? this._magnitude
@@ -27,44 +56,77 @@ export class Vector {
           this.values.reduce((acc, value) => acc + Math.pow(value, 2), 0)
         ));
   }
+  /**
+   * The angle θ between this Vector and the x-axis such that −π < θ ≤ π.
+   */
   get heading(): number {
-   return Math.atan2(this.y, this.x);
- }
+    return Math.atan2(this.y, this.x);
+  }
+  /**
+   * The number of values in this Vector, e.g. 2D => length === 2.
+   */
   get length(): number {
     return this.values.length;
   }
+  /**
+   * The x value for this Vector, i.e. this[0]
+   */
   get x(): number {
     return this.values[0];
   }
+  /**
+   * The y value for this Vector, i.e. this[1]
+   */
   get y(): number {
     return this.values[1];
   }
+  /**
+   * The z value for this Vector, i.e. this[2]
+   */
   get z(): number {
     return this.values[2];
   }
+  /**
+   * A normalized version of this Vector.
+   * @returns A copy of this Vector with magnitude === 1
+   */
   public normalize(): Vector {
     return this.setMag(1);
   }
+  /**
+   * Rotates this Vector by `angle` radians.
+   * @param angle - the angle with which to rotate in radians
+   * @returns A copy of this Vector rotated by `angle`
+   */
   public rotate(angle: number): Vector {
     return new Vector(
       this.x * Math.cos(angle) - this.y * Math.sin(angle),
       this.x * Math.sin(angle) + this.y * Math.cos(angle)
     );
   }
+  /**
+   * Sets the magnitude of this Vector to a given value.
+   * @param magnitude - the value with which to set the magnitude
+   * @returns A copy of this Vector with the given magnitude
+   */
   public setMag(magnitude?: number): Vector {
-    if (magnitude != null) {
-      const curMag = this.magnitude;
-      return new Vector(...this.values.map(v => (v / curMag) * magnitude));
-    } else {
-      return this;
-    }
+    return magnitude != null
+      ? new Vector(...this.values.map(v => (v / this.magnitude) * magnitude))
+      : this;
   }
-  public limit(max: number): Vector {
-    if (this.magnitude > max) {
-      return this.setMag(max);
-    }
-    return this;
+  /**
+   * Limits a this Vectors magnitude by the given amount.
+   * @param maxMagnitude - the maximum magnitude allowed
+   * @returns A Vector with a magnitude less than or equal to `max`
+   */
+  public limit(maxMagnitude: number): Vector {
+    return this.magnitude > maxMagnitude ? this.setMag(maxMagnitude) : this;
   }
+  /**
+   * Calculates the distance between two Vectors.
+   * @param other - the other Vector
+   * @returns The distance between this Vector and `other`
+   */
   public dist(other: Vector): number {
     return Math.sqrt(
       this.values.reduce(
@@ -73,6 +135,11 @@ export class Vector {
       )
     );
   }
+  /**
+   * Calculates the sum of this Vector and another.
+   * @param vs - the Vector(s) with which to add (addends)
+   * @returns The summation of this Vector and `vs`
+   */
   public add(...vs: Vector[]): Vector {
     if (vs.length < 1) {
       return this;
@@ -82,6 +149,11 @@ export class Vector {
 
     return sum.add(...dropFirst(vs));
   }
+  /**
+   * Calculates the difference between this Vector and another.
+   * @param vs - the Vector(s) with which to subtract (subtrahends)
+   * @returns The difference between this Vector and `vs`
+   */
   public subtract(...vs: Vector[]): Vector {
     if (vs.length < 1) {
       return this;
@@ -91,18 +163,31 @@ export class Vector {
 
     return diff.subtract(...dropFirst(vs));
   }
+  /**
+   * Multiplies this Vector by a scalar (scalar multiplication).
+   * @param n - the first value with which to multiply
+   * @param ns - the remaining values with which to multiply
+   * @returns A copy of this Vector scaled by `n` and `ns`
+   */
   public mult(n: number, ...ns: number[]): Vector {
     n *= ns.length > 0 ? ns.reduce((acc, c) => acc * c, 1) : 1;
     return new Vector(...this.values.map(v => v * n));
   }
   /**
-   * @returns a value θ: −π < θ ≤ π
+   * @returns A copy of this Vector.
    */
-
   public copy(): Vector {
     return new Vector(...this.values);
   }
-  public dotProduct(b: Vector): number {
-    return this.values.reduce((acc, value, i) => acc + value * b.values[i], 0);
+  /**
+   * Calculates the dot product of this Vector and another (scalar product).
+   * @param other - the other Vector with which to calculate the dot product
+   * @returns The dot product
+   */
+  public dotProduct(other: Vector): number {
+    return this.values.reduce(
+      (acc, value, i) => acc + value * other.values[i],
+      0
+    );
   }
 }

@@ -1,7 +1,5 @@
 import { dropFirst, repeat } from 'utility-functions';
-import { Vector } from './vector';
-
-const radians = (degrees: number) => (degrees * Math.PI) / 180;
+import { toRadians, Vector } from './vector';
 
 function dimensionsError(a: Matrix, b: Matrix) {
   throw Error(
@@ -43,7 +41,7 @@ export class Matrix {
   ): Matrix {
     const m: number[][] = identity2dArray(dimension);
 
-    const angle = radians(degrees);
+    const angle = toRadians(degrees);
 
     m[i][i] = m[j][j] = Math.cos(angle);
     m[i][j] = -1 * (m[j][i] = Math.sin(angle));

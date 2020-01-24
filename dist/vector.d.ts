@@ -1,30 +1,119 @@
+/**
+ * Converts from degrees to radians
+ * @param degrees - angle in degrees to be converted
+ * @returns The angle in radians
+ */
 export declare function toRadians(degrees: number): number;
+/**
+ * A class representation of a immutable mathmatical vector
+ */
 export declare class Vector {
     [key: number]: number;
     private readonly values;
     private _magnitude?;
+    /**
+     * Creates a Vector from the given values.
+     * @param x - x value
+     * @param y - y value
+     * @param others - other values e.g. z
+     * @returns A new Vector
+     */
     static create(x?: number, y?: number, ...others: number[]): Vector;
+    /**
+     * Fills a Vector with a given value `c`.
+     * @param c - value to fill with
+     * @param length - number of times to repeat `c` in Vector
+     * @returns A new Vector
+     */
     static fill(c: number, length: number): Vector;
-    static random2D(maxforce?: number): Vector;
+    /**
+     * Creates a random 2D Vector.
+     * @param magnitude - optional value for the Vector's magnitude
+     * @returns A new Vector
+     */
+    static random2D(magnitude?: number): Vector;
     private constructor();
+    /**
+     * The magnitude of this Vector, i.e. size.
+     */
     get magnitude(): number;
+    /**
+     * The angle θ between this Vector and the x-axis such that −π < θ ≤ π.
+     */
     get heading(): number;
+    /**
+     * The number of values in this Vector, e.g. 2D => length === 2.
+     */
     get length(): number;
+    /**
+     * The x value for this Vector, i.e. this[0]
+     */
     get x(): number;
+    /**
+     * The y value for this Vector, i.e. this[1]
+     */
     get y(): number;
+    /**
+     * The z value for this Vector, i.e. this[2]
+     */
     get z(): number;
+    /**
+     * A normalized version of this Vector.
+     * @returns A copy of this Vector with magnitude === 1
+     */
     normalize(): Vector;
+    /**
+     * Rotates this Vector by `angle` radians.
+     * @param angle - the angle with which to rotate in radians
+     * @returns A copy of this Vector rotated by `angle`
+     */
     rotate(angle: number): Vector;
+    /**
+     * Sets the magnitude of this Vector to a given value.
+     * @param magnitude - the value with which to set the magnitude
+     * @returns A copy of this Vector with the given magnitude
+     */
     setMag(magnitude?: number): Vector;
-    limit(max: number): Vector;
+    /**
+     * Limits a this Vectors magnitude by the given amount.
+     * @param maxMagnitude - the maximum magnitude allowed
+     * @returns A Vector with a magnitude less than or equal to `max`
+     */
+    limit(maxMagnitude: number): Vector;
+    /**
+     * Calculates the distance between two Vectors.
+     * @param other - the other Vector
+     * @returns The distance between this Vector and `other`
+     */
     dist(other: Vector): number;
+    /**
+     * Calculates the sum of this Vector and another.
+     * @param vs - the Vector(s) with which to add (addends)
+     * @returns The summation of this Vector and `vs`
+     */
     add(...vs: Vector[]): Vector;
+    /**
+     * Calculates the difference between this Vector and another.
+     * @param vs - the Vector(s) with which to subtract (subtrahends)
+     * @returns The difference between this Vector and `vs`
+     */
     subtract(...vs: Vector[]): Vector;
+    /**
+     * Multiplies this Vector by a scalar (scalar multiplication).
+     * @param n - the first value with which to multiply
+     * @param ns - the remaining values with which to multiply
+     * @returns A copy of this Vector scaled by `n` and `ns`
+     */
     mult(n: number, ...ns: number[]): Vector;
     /**
-     * @returns a value θ: −π < θ ≤ π
+     * @returns A copy of this Vector.
      */
     copy(): Vector;
-    dotProduct(b: Vector): number;
+    /**
+     * Calculates the dot product of this Vector and another (scalar product).
+     * @param other - the other Vector with which to calculate the dot product
+     * @returns The dot product
+     */
+    dotProduct(other: Vector): number;
 }
 //# sourceMappingURL=vector.d.ts.map

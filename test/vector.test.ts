@@ -1,5 +1,5 @@
 import { random, randomInt, range } from 'utility-functions';
-import { Vector, toRadians } from '../src/vector';
+import { toRadians, Vector } from '../src/vector';
 
 const precision = 9;
 
