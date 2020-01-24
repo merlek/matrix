@@ -11,11 +11,30 @@
       "build": "npm run build:dev",
       "build:dev": "npm run clean && npm run buildWebpack:dev",
       "build:prd": "npm run clean && npm run buildWebpack:prd",
-      "buildWebpack:prd": "webpack --mode=production",
-      "buildWebpack:dev": "webpack --config webpack.dev.config.js"
+      "buildWebpack:prd": "webpack --mode=production --config webpack.config.js",
+      "buildWebpack:dev": "webpack --config webpack.dev.config.js",
+      "lint": "tslint -p src/tsconfig.json",
+      "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+      "prepare": "npm run build:prd",
+      "prepublishOnly": "npm test && npm run lint",
+      "preversion": "npm run lint",
+      "version": "npm run format && npm run git-src && npm run build:prd && npm run git-dist",
+      "postversion": "git push && git push --tags",
+      "git-dist": "git add -A dist",
+      "git-src": "git add -A src"
    },
+   "keywords": [
+      "matrix",
+      "matrices",
+      "vector",
+      "vectors"
+   ],
    "author": "merlek",
    "license": "ISC",
+   "dependencies": {
+      "@types/node": "^13.1.6",
+      "utility-functions": "merlek/utility-functions#f238cdd"
+   },
    "devDependencies": {
       "@types/jasmine": "^3.5.1",
       "karma": "^4.4.1",
@@ -23,16 +42,28 @@
       "karma-jasmine": "^3.1.0",
       "karma-spec-reporter": "0.0.32",
       "karma-webpack": "^4.0.2",
+      "pre-commit": "^1.2.2",
+      "prettier": "^1.19.1",
       "ts-loader": "^6.2.1",
       "ts-node": "^8.6.2",
       "tslint": "^5.20.1",
+      "tslint-config-prettier": "^1.18.0",
       "typescript": "^3.7.5",
       "webpack": "^4.41.5",
       "webpack-cli": "^3.3.10",
       "webpack-dev-server": "^3.10.1"
    },
-   "dependencies": {
-      "@types/node": "^13.1.6",
-      "common": "merlek/common#0c551af"
-   }
+   "files": [
+      "dist/**/*"
+   ],
+   "prettier": {
+      "printWidth": 80,
+      "singleQuote": true
+   },
+   "pre-commit": [
+      "lint",
+      "test",
+      "build:prd",
+      "git-dist"
+   ]
 }

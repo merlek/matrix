@@ -1,4 +1,4 @@
-import { repeat } from 'common';
+import { repeat } from 'utility-functions';
 import { Vector } from '../src/vector';
 
 describe('Vector', () => {

@@ -1,4 +1,4 @@
-import { repeat, random, dropFirst } from 'common';
+import { repeat, random, dropFirst } from 'utility-functions';
 
 export class Vector {
   [key: number]: number;

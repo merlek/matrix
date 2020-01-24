@@ -1,8 +1,10 @@
 const path = require('path');
 
 module.exports = {
-   entry: ['./src/matrix.ts', './src/vector.ts'],
-   devtool: 'inline-source-map',
+   entry: {
+      matrix: ['./src/matrix.ts', './src/vector.ts']
+   },
+   devtool: 'source-map',
    mode: 'development',
    module: {
       rules: [
@@ -17,11 +19,14 @@ module.exports = {
       extensions: ['.tsx', '.ts', '.js', '.jsx'],
    },
    output: {
-      filename: 'matrix.js',
-      path: path.resolve(__dirname, './dist'),
+      path: path.resolve(__dirname, 'dist'),
+      filename: '[name].js',
+      libraryTarget: 'umd',
+      library: 'matrix',
+      umdNamedDefine: true
    },
    devServer: {
-      contentBase: path.join(__dirname, './dist'),
+      contentBase: path.join(__dirname, 'dist'),
       compress: true,
       hot: true,
    }

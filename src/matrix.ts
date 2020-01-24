@@ -1,5 +1,5 @@
 import { Vector } from './vector';
-import { dropFirst, repeat } from 'common';
+import { dropFirst, repeat } from 'utility-functions';
 
 const radians = (degrees: number) => (degrees * Math.PI) / 180;
 

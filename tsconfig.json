@@ -5,11 +5,10 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "module": "es6",
-    "target": "es6",
+    "target": "ES5",
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "strict": true,
-    "types": ["jasmine"]
+    "strict": true
   },
-  "lib": ["es5", "es6", "dom"]
+  "lib": ["es5", "es6"]
 }
