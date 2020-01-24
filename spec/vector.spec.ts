@@ -1,24 +1,42 @@
-// describe('common', () => {
-//   const array: number[] = [1, 2, 3, 4];
-//   const obj = {
-//     cat: 'cat',
-//     dog: 'dog'
-//   };
-//   const addOne = (x: number) => x + 1;
-//   const minusOne = (x: number) => x - 1;
-//   const addI = (x: number) => (i: number) => x + i;
+import { repeat } from 'common';
+import { Vector } from '../src/vector';
 
-//   afterAll(function() {
-//     expect(array).toEqual([1, 2, 3, 4]);
-//     expect(obj).toEqual({
-//       cat: 'cat',
-//       dog: 'dog'
-//     });
-//   });
+describe('Vector', () => {
+  const v = Vector.create();
 
-//   it('dropFirst removes first element of array', () => {
-//     expect(dropFirst(array)).toEqual([2, 3, 4]);
-//   });
+  //   it('static create creates a new vector filled with a value', () => {
+  //     const value = 5;
+  //     expect(v.x).toBe(0);
+  //     expect(v.y).toBe(0);
+  //     expect(v.z).toBeUndefined();
+  //   });
 
-  
-// });
+  it('Vector.fill creates a new vector filled with a value', () => {
+    const value = 5;
+    expect(typeof repeat).toBe('function');
+    expect(Vector.fill(value, 2)).toEqual(Vector.create(value, value));
+  });
+
+  //   it('normalize returns a vector with magnitude of 1', () => {
+  //     expect(
+  //       Vector.create(1, 1)
+  //         .normalize()
+  //         .getMag()
+  //     ).toBe(1);
+  //   });
+
+  // static fill(c: number, length: number): Vector ;
+  // static random2D(maxforce?: number): Vector ;
+  // public normalize(): Vector ;
+  // public rotate(angle: number): Vector ;
+  // public setMag(magnitude?: number): Vector ;
+  // public getMag(): number ;
+  // public limit(max: number): Vector ;
+  // public dist(other: Vector): number ;
+  // public add(...vs: Vector[]): Vector ;
+  // public subtract(...vs: Vector[]): Vector ;
+  // public mult(n: number): Vector ;
+  // public heading(): number ;
+  // public copy(): Vector ;
+  // public dotProduct(b: Vector): number ;
+});

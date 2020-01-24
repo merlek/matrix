@@ -8,7 +8,8 @@
     "module": "es6",
     "target": "es6",
     "moduleResolution": "node",
-    "strict": true
+    "strict": true,
+    "types": ["jasmine"]
   },
   "lib": ["es5", "es6", "dom"]
 }

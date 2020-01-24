@@ -12,8 +12,7 @@
       "build:dev": "npm run clean && npm run buildWebpack:dev",
       "build:prd": "npm run clean && npm run buildWebpack:prd",
       "buildWebpack:prd": "webpack --mode=production",
-      "buildWebpack:dev": "webpack --config webpack.dev.config.js",
-      "postinstall": "npm run build:dev"
+      "buildWebpack:dev": "webpack --config webpack.dev.config.js"
    },
    "author": "merlek",
    "license": "ISC",
@@ -34,6 +33,6 @@
    },
    "dependencies": {
       "@types/node": "^13.1.6",
-      "common": "file:../common"
+      "common": "merlek/common#0c551af"
    }
 }
