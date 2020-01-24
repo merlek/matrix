@@ -67,35 +67,37 @@ describe('Vector', () => {
     expect(toRadians(180)).toBeCloseTo(Math.PI, precision);
   });
 
-  it('rotate rotates a vector 0 degrees about the XY axis', () => {
-    const vec = unit.rotate(toRadians(0));
-    expect(vec.x).toBeCloseTo(1, precision);
-    expect(vec.y).toBeCloseTo(0, precision);
-    expect(vec.magnitude).toBeCloseTo(1, precision);
-  });
-  it('rotate rotates a vector 90 degrees about the XY axis', () => {
-    const vec = unit.rotate(toRadians(90));
-    expect(vec.x).toBeCloseTo(0, precision);
-    expect(vec.y).toBeCloseTo(1, precision);
-    expect(vec.magnitude).toBeCloseTo(1, precision);
-  });
-  it('rotate rotates a vector 180 degrees about the XY axis', () => {
-    const vec = unit.rotate(toRadians(180));
-    expect(vec.x).toBeCloseTo(-1, precision);
-    expect(vec.y).toBeCloseTo(0, precision);
-    expect(vec.magnitude).toBeCloseTo(1, precision);
-  });
-  it('rotate rotates a vector 270 degrees about the XY axis', () => {
-    const vec = unit.rotate(toRadians(270));
-    expect(vec.x).toBeCloseTo(0, precision);
-    expect(vec.y).toBeCloseTo(-1, precision);
-    expect(vec.magnitude).toBeCloseTo(1, precision);
-  });
-  it('rotate rotates a vector 360 degrees about the XY axis', () => {
-    const vec = unit.rotate(toRadians(360));
-    expect(vec.x).toBeCloseTo(1, precision);
-    expect(vec.y).toBeCloseTo(0, precision);
-    expect(vec.magnitude).toBeCloseTo(1, precision);
+  describe('rotate', () => {
+    it('rotate a vector 0 degrees about the XY axis', () => {
+      const vec = unit.rotate(toRadians(0));
+      expect(vec.x).toBeCloseTo(1, precision);
+      expect(vec.y).toBeCloseTo(0, precision);
+      expect(vec.magnitude).toBeCloseTo(1, precision);
+    });
+    it('rotate a vector 90 degrees about the XY axis', () => {
+      const vec = unit.rotate(toRadians(90));
+      expect(vec.x).toBeCloseTo(0, precision);
+      expect(vec.y).toBeCloseTo(1, precision);
+      expect(vec.magnitude).toBeCloseTo(1, precision);
+    });
+    it('rotate a vector 180 degrees about the XY axis', () => {
+      const vec = unit.rotate(toRadians(180));
+      expect(vec.x).toBeCloseTo(-1, precision);
+      expect(vec.y).toBeCloseTo(0, precision);
+      expect(vec.magnitude).toBeCloseTo(1, precision);
+    });
+    it('rotate a vector 270 degrees about the XY axis', () => {
+      const vec = unit.rotate(toRadians(270));
+      expect(vec.x).toBeCloseTo(0, precision);
+      expect(vec.y).toBeCloseTo(-1, precision);
+      expect(vec.magnitude).toBeCloseTo(1, precision);
+    });
+    it('rotate a vector 360 degrees about the XY axis', () => {
+      const vec = unit.rotate(toRadians(360));
+      expect(vec.x).toBeCloseTo(1, precision);
+      expect(vec.y).toBeCloseTo(0, precision);
+      expect(vec.magnitude).toBeCloseTo(1, precision);
+    });
   });
 
   it('limit creates a vector with magnitude less than or equal to limit', () => {
@@ -114,30 +116,34 @@ describe('Vector', () => {
     expect(v.dist(v)).toBe(0);
   });
 
-  it('add calculates the sum of two vectors', () => {
-    const dist = randomInt(1)(100);
-    const b = Vector.create(0, dist);
-    expect(zero.add(b)).toEqual(b);
-    expect(v.add(v).magnitude).toBeCloseTo(v.magnitude * 2, precision);
-  });
-  it('add calculates the sum of multiple vectors', () => {
-    const v5 = v.add(v, v, v, v);
-    expect(v5.magnitude).toBeCloseTo(v.magnitude * 5, precision);
-    expect(v5.x).toBeCloseTo(v.x * 5, precision);
-    expect(v5.y).toBeCloseTo(v.y * 5, precision);
+  describe('add', () => {
+    it('add two vectors', () => {
+      const dist = randomInt(1)(100);
+      const b = Vector.create(0, dist);
+      expect(zero.add(b)).toEqual(b);
+      expect(v.add(v).magnitude).toBeCloseTo(v.magnitude * 2, precision);
+    });
+    it('add multiple vectors', () => {
+      const v5 = v.add(v, v, v, v);
+      expect(v5.magnitude).toBeCloseTo(v.magnitude * 5, precision);
+      expect(v5.x).toBeCloseTo(v.x * 5, precision);
+      expect(v5.y).toBeCloseTo(v.y * 5, precision);
+    });
   });
 
-  it('subtract calculates the difference of two vectors', () => {
-    const dist = randomInt(1)(100);
-    const b = Vector.create(0, dist);
-    expect(b.subtract(zero)).toEqual(b);
-    expect(v.subtract(v).magnitude).toBeCloseTo(0, precision);
-  });
-  it('subtract calculates the difference of multiple vectors', () => {
-    const v5 = v.subtract(v, v, v, v);
-    expect(v5.magnitude).toBeCloseTo(v.magnitude * 3, precision);
-    expect(v5.x).toBeCloseTo(v.x * -3, precision);
-    expect(v5.y).toBeCloseTo(v.y * -3, precision);
+  describe('subtract', () => {
+    it('subtract two vectors', () => {
+      const dist = randomInt(1)(100);
+      const b = Vector.create(0, dist);
+      expect(b.subtract(zero)).toEqual(b);
+      expect(v.subtract(v).magnitude).toBeCloseTo(0, precision);
+    });
+    it('subtract multiple vectors', () => {
+      const v5 = v.subtract(v, v, v, v);
+      expect(v5.magnitude).toBeCloseTo(v.magnitude * 3, precision);
+      expect(v5.x).toBeCloseTo(v.x * -3, precision);
+      expect(v5.y).toBeCloseTo(v.y * -3, precision);
+    });
   });
 
   it('mult calculates the scalar multiplication of a vector', () => {
@@ -148,27 +154,29 @@ describe('Vector', () => {
     expect(vec.magnitude).toBeCloseTo(v.magnitude * dist * dist, precision);
   });
 
-  it('heading calculates the angle of a vector from the x axis', () => {
-    expect(v.heading).toBeLessThanOrEqual(Math.PI);
-    expect(v.heading).toBeGreaterThan(-Math.PI);
-  });
-  it('heading calculates the angle of a vector (1,0) from the x axis', () => {
-    expect(Vector.create(1, 0).heading).toBeCloseTo(0, precision);
-  });
-  it('heading calculates the angle of a vector (0,1) from the x axis', () => {
-    expect(Vector.create(0, 1).heading).toBeCloseTo(toRadians(90), precision);
-  });
-  it('heading calculates the angle of a vector (-1,0) from the x axis', () => {
-    expect(Vector.create(-1, 0).heading).toBeCloseTo(
-      toRadians(180),
-      precision
-    );
-  });
-  it('heading calculates the angle of a vector (0,-1) from the x axis', () => {
-    expect(Vector.create(0, -1).heading).toBeCloseTo(
-      toRadians(-90),
-      precision
-    );
+  describe('heading', () => {
+    it('calculate the angle of a vector from the x-axis', () => {
+      expect(v.heading).toBeLessThanOrEqual(Math.PI);
+      expect(v.heading).toBeGreaterThan(-Math.PI);
+    });
+    it('calculate the angle of a vector (1,0) from the x-axis', () => {
+      expect(Vector.create(1, 0).heading).toBeCloseTo(0, precision);
+    });
+    it('calculate the angle of a vector (0,1) from the x-axis', () => {
+      expect(Vector.create(0, 1).heading).toBeCloseTo(toRadians(90), precision);
+    });
+    it('calculate the angle of a vector (-1,0) from the x-axis', () => {
+      expect(Vector.create(-1, 0).heading).toBeCloseTo(
+        toRadians(180),
+        precision
+      );
+    });
+    it('calculate the angle of a vector (0,-1) from the x-axis', () => {
+      expect(Vector.create(0, -1).heading).toBeCloseTo(
+        toRadians(-90),
+        precision
+      );
+    });
   });
 
   it('copy creates an identical copy of a vector', () => {
