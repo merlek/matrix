@@ -201,6 +201,7 @@ describe('Vector', () => {
 
   it('copy creates an identical copy of a vector', () => {
     const copy = v.copy();
+    expect(copy).not.toBe(v);
     expect(copy.magnitude).toBe(v.magnitude);
     expect(copy).toEqual(v);
   });

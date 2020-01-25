@@ -125,6 +125,11 @@ describe('Matrix', () => {
     });
   });
 
+  it('matrix values are immutable', () => {
+    m.toArray()[0][0] = 5;
+    expect(m.get(0, 0)).toBe(0);
+  });
+
   it('a 2x3 matrix has 2 rows', () => {
     expect(m.rows).toBe(2);
   });
@@ -228,15 +233,18 @@ describe('Matrix', () => {
         expect(value).toBe(expected[index++]);
       }
     });
-    // it('multiple values', () => {
-    //   const expected = [0, 10, 20, 30, 40, 50];
-    //   let index = 0;
-    //   for (const value of m.mult(2, 5)) {
-    //     expect(value).toBe(expected[index++]);
-    //   }
-    // });
+    it('multiple values', () => {
+      const expected = [42, 150, 61, 214, 80, 278];
+      let index = 0;
+      for (const value of m.transpose().mult(m, m.transpose())) {
+        expect(value).toBe(expected[index++]);
+      }
+    });
   });
 
-  //    public mult(...ms: Matrix[]): Matrix {
-  //    public copy(): Matrix {
+  it('copy creates an identical copy of a matrix', () => {
+    const copy = m.copy();
+    expect(copy).not.toBe(m);
+    expect(copy).toEqual(m);
+  });
 });
