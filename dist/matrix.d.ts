@@ -1,6 +1,6 @@
 export declare class Matrix implements Iterable<number> {
     private readonly values;
-    static create(values: number[][], transpose?: boolean): Matrix;
+    static create(values: number[][]): Matrix;
     static identity(dimension: number): Matrix;
     static rotation(dimension?: number, i?: number, j?: number): (angle: number) => Matrix;
     static rotationX(dimension: number): (angle: number) => Matrix;
@@ -22,5 +22,7 @@ export declare class Matrix implements Iterable<number> {
     transpose(): Matrix;
     mult(...ms: Matrix[]): Matrix;
     copy(): Matrix;
+    toReadonlyArray(): ReadonlyArray<ReadonlyArray<number>>;
+    toArray(): number[][];
 }
 //# sourceMappingURL=matrix.d.ts.map

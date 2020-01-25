@@ -3,6 +3,11 @@ import { toRadians } from '../src/vector';
 
 const precision = 9;
 
+const degrees90 = toRadians(90);
+const degrees180 = toRadians(180);
+const degrees270 = toRadians(270);
+const degrees360 = toRadians(360);
+
 describe('Matrix', () => {
   const dim = 3;
   const max = 100;
@@ -36,41 +41,139 @@ describe('Matrix', () => {
       describe('2D', () => {
         const r = Matrix.rotation();
         it('90 degree rotation', () => {
-          const rm = r(toRadians(90));
-          expect(rm.get(0, 0)).toBeCloseTo(0);
-          expect(rm.get(1, 0)).toBeCloseTo(-1);
-          expect(rm.get(0, 1)).toBeCloseTo(1);
-          expect(rm.get(1, 1)).toBeCloseTo(0);
+          const rm = r(degrees90);
+          expect(rm.get(0, 0)).toBeCloseTo(0, precision);
+          expect(rm.get(0, 1)).toBeCloseTo(-1, precision);
+          expect(rm.get(1, 0)).toBeCloseTo(1, precision);
+          expect(rm.get(1, 1)).toBeCloseTo(0, precision);
         });
         it('180 degree rotation', () => {
-          const rm = r(toRadians(180));
-          expect(rm.get(0, 0)).toBeCloseTo(-1);
-          expect(rm.get(1, 0)).toBeCloseTo(0);
-          expect(rm.get(0, 1)).toBeCloseTo(0);
-          expect(rm.get(1, 1)).toBeCloseTo(-1);
+          const rm = r(degrees180);
+          expect(rm.get(0, 0)).toBeCloseTo(-1, precision);
+          expect(rm.get(0, 1)).toBeCloseTo(0, precision);
+          expect(rm.get(1, 0)).toBeCloseTo(0, precision);
+          expect(rm.get(1, 1)).toBeCloseTo(-1, precision);
         });
         it('270 degree rotation', () => {
-          const rm = r(toRadians(270));
-          expect(rm.get(0, 0)).toBeCloseTo(0);
-          expect(rm.get(1, 0)).toBeCloseTo(1);
-          expect(rm.get(0, 1)).toBeCloseTo(-1);
-          expect(rm.get(1, 1)).toBeCloseTo(0);
+          const rm = r(degrees270);
+          expect(rm.get(0, 0)).toBeCloseTo(0, precision);
+          expect(rm.get(0, 1)).toBeCloseTo(1, precision);
+          expect(rm.get(1, 0)).toBeCloseTo(-1, precision);
+          expect(rm.get(1, 1)).toBeCloseTo(0, precision);
         });
         it('360 degree rotation', () => {
-          const rm = r(toRadians(360));
-          expect(rm.get(0, 0)).toBeCloseTo(1);
-          expect(rm.get(1, 0)).toBeCloseTo(0);
-          expect(rm.get(0, 1)).toBeCloseTo(0);
-          expect(rm.get(1, 1)).toBeCloseTo(1);
+          const rm = r(degrees360);
+          expect(rm.get(0, 0)).toBeCloseTo(1, precision);
+          expect(rm.get(0, 1)).toBeCloseTo(0, precision);
+          expect(rm.get(1, 0)).toBeCloseTo(0, precision);
+          expect(rm.get(1, 1)).toBeCloseTo(1, precision);
         });
       });
       describe('3D', () => {
-        it('rotationX 90 degree rotation', () => {
-          const rm = Matrix.rotationX(3)(toRadians(90));
-          // expect(rm.get(0, 0)).toBeCloseTo(0);
-          // expect(rm.get(1, 0)).toBeCloseTo(-1);
-          // expect(rm.get(0, 1)).toBeCloseTo(1);
-          // expect(rm.get(1, 1)).toBeCloseTo(0);
+        describe('rotationX', () => {
+          const r = Matrix.rotationX(3);
+          it('90 degree rotation', () => {
+            const rm = r(degrees90);
+            const expected = [1, 0, 0, 0, 0, -1, 0, 1, 0];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('180 degree rotation', () => {
+            const rm = r(degrees180);
+            const expected = [1, 0, 0, 0, -1, 0, 0, 0, -1];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('270 degree rotation', () => {
+            const rm = r(degrees270);
+            const expected = [1, 0, 0, 0, 0, 1, 0, -1, 0];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('360 degree rotation', () => {
+            const rm = r(degrees360);
+            const expected = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+        });
+        describe('rotationY', () => {
+          const r = Matrix.rotationY(3);
+          it('90 degree rotation', () => {
+            const rm = r(degrees90);
+            const expected = [0, 0, 1, 0, 1, 0, -1, 0, 0];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('180 degree rotation', () => {
+            const rm = r(degrees180);
+            const expected = [-1, 0, 0, 0, 1, 0, 0, 0, -1];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('270 degree rotation', () => {
+            const rm = r(degrees270);
+            const expected = [0, 0, -1, 0, 1, 0, 1, 0, 0];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('360 degree rotation', () => {
+            const rm = r(degrees360);
+            const expected = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+        });
+        describe('rotationZ', () => {
+          const r = Matrix.rotationZ(3);
+          it('90 degree rotation', () => {
+            const rm = r(degrees90);
+            const expected = [0, -1, 0, 1, 0, 0, 0, 0, 1];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('180 degree rotation', () => {
+            const rm = r(degrees180);
+            const expected = [-1, 0, 0, 0, -1, 0, 0, 0, 1];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('270 degree rotation', () => {
+            const rm = r(degrees270);
+            const expected = [0, 1, 0, -1, 0, 0, 0, 0, 1];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
+          it('360 degree rotation', () => {
+            const rm = r(degrees360);
+            const expected = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[index++], precision);
+            }
+          });
         });
       });
     });

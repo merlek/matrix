@@ -26,9 +26,8 @@ function identity2dArray(dimension: number): number[][] {
 }
 
 export class Matrix implements Iterable<number> {
-  static create(values: number[][], transpose = false): Matrix {
-    const m = new Matrix(values.map(v => [...v]));
-    return transpose ? m.transpose() : m;
+  static create(values: number[][]): Matrix {
+    return new Matrix(values.map(v => [...v]));
   }
   static identity(dimension: number): Matrix {
     return Matrix.create(identity2dArray(dimension));
@@ -43,8 +42,8 @@ export class Matrix implements Iterable<number> {
 
       m[i][i] = m[j][j] = Math.cos(angle);
 
-      m[i][j] = (i + (j % 2) === 0 ? -1 : 1) * Math.sin(angle);
-      m[j][i] = (i + (j % 2) === 0 ? 1 : -1) * Math.sin(angle);
+      m[i][j] = (i + (j % 2) === 0 ? 1 : -1) * Math.sin(angle);
+      m[j][i] = (i + (j % 2) === 0 ? -1 : 1) * Math.sin(angle);
 
       return Matrix.create(m);
     };
@@ -147,8 +146,13 @@ export class Matrix implements Iterable<number> {
 
     return Matrix.create(c).mult(...dropFirst(ms));
   }
-
   public copy(): Matrix {
     return new Matrix(this.values.map(v => [...v]));
+  }
+  public toReadonlyArray(): ReadonlyArray<ReadonlyArray<number>> {
+    return this.values;
+  }
+  public toArray(): number[][] {
+    return this.values.map(v => [...v]);
   }
 }
