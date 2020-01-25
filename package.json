@@ -28,13 +28,13 @@
    "keywords": [
       "matrix",
       "matrices",
-      "vector",
-      "vectors"
+      "math"
    ],
    "author": "merlek",
-   "license": "ISC",
+   "license": "MIT",
    "dependencies": {
       "@types/node": "^13.1.6",
+      "vector": "merlek/vector#72f197c",
       "utility-functions": "merlek/utility-functions#e7a909b"
    },
    "devDependencies": {

@@ -1,1 +1,2 @@
-This is a project of matrix math functions.
+# matrix
+A matrix manipulation library.

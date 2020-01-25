@@ -1,3 +1,10 @@
+/**
+ * Converts from degrees to radians
+ * @param degrees - angle in degrees to be converted
+ * @returns The angle in radians
+ */
+export declare function toRadians(degrees: number): number;
+export declare function dimensionsError(a: Matrix, b: Matrix): Error;
 export declare class Matrix implements Iterable<number> {
     private readonly values;
     static create(values: number[][]): Matrix;

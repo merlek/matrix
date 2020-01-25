@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
    entry: {
-      matrix: ['./src/matrix.ts', './src/vector.ts']
+      matrix: './src/matrix.ts'
    },
    devtool: 'inline-source-map',
    module: {

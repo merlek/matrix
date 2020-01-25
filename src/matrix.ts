@@ -1,9 +1,17 @@
 import { dropFirst, repeat } from 'utility-functions';
+import { Vector } from 'vector';
 import { MatrixIterator } from './matrix-iterator';
-import { Vector } from './vector';
 
-function dimensionsError(a: Matrix, b: Matrix) {
-  throw Error(
+/**
+ * Converts from degrees to radians
+ * @param degrees - angle in degrees to be converted
+ * @returns The angle in radians
+ */
+export function toRadians(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
+export function dimensionsError(a: Matrix, b: Matrix): Error {
+  return Error(
     'Matrices are not the right dimensions: a:' +
       a.rows +
       'x' +

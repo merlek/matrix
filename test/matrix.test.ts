@@ -1,5 +1,4 @@
-import { Matrix } from '../src/matrix';
-import { toRadians } from '../src/vector';
+import { Matrix, toRadians, dimensionsError } from '../src/matrix';
 
 const precision = 9;
 
@@ -9,10 +8,6 @@ const degrees270 = toRadians(270);
 const degrees360 = toRadians(360);
 
 describe('Matrix', () => {
-  const dim = 3;
-  const max = 100;
-  const min = -100;
-
   const m = Matrix.create([
     [0, 1, 2],
     [3, 4, 5]
@@ -222,9 +217,7 @@ describe('Matrix', () => {
 
   describe('mult', () => {
     it('error', () => {
-      expect(() => m.mult(m)).toThrow(
-        new Error('Matrices are not the right dimensions: a:2x3 b:2x3')
-      );
+      expect(() => m.mult(m)).toThrow(dimensionsError(m, m));
     });
     it('one value', () => {
       const expected = [5, 14, 14, 50];
