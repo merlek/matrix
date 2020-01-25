@@ -70,110 +70,56 @@ describe('Matrix', () => {
         });
       });
       describe('3D', () => {
+        const degrees = [90, 180, 270, 360];
+        const rotation3DTest = (
+          test: number,
+          rFunc: (angle: number) => Matrix,
+          angles: number[],
+          expected: number[][]
+        ) => {
+          it(angles[test] + ' degree rotation', () => {
+            const rm = rFunc(toRadians(angles[test]));
+            let index = 0;
+            for (const value of rm) {
+              expect(value).toBeCloseTo(expected[test][index++], precision);
+            }
+          });
+        };
         describe('rotationX', () => {
           const r = Matrix.rotationX(3);
-          it('90 degree rotation', () => {
-            const rm = r(degrees90);
-            const expected = [1, 0, 0, 0, 0, -1, 0, 1, 0];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('180 degree rotation', () => {
-            const rm = r(degrees180);
-            const expected = [1, 0, 0, 0, -1, 0, 0, 0, -1];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('270 degree rotation', () => {
-            const rm = r(degrees270);
-            const expected = [1, 0, 0, 0, 0, 1, 0, -1, 0];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('360 degree rotation', () => {
-            const rm = r(degrees360);
-            const expected = [1, 0, 0, 0, 1, 0, 0, 0, 1];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
+          const expectedValues = [
+            [1, 0, 0, 0, 0, -1, 0, 1, 0],
+            [1, 0, 0, 0, -1, 0, 0, 0, -1],
+            [1, 0, 0, 0, 0, 1, 0, -1, 0],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1]
+          ];
+          for (let test = 0; test < degrees.length; test++) {
+            rotation3DTest(test, r, degrees, expectedValues);
+          }
         });
         describe('rotationY', () => {
           const r = Matrix.rotationY(3);
-          it('90 degree rotation', () => {
-            const rm = r(degrees90);
-            const expected = [0, 0, 1, 0, 1, 0, -1, 0, 0];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('180 degree rotation', () => {
-            const rm = r(degrees180);
-            const expected = [-1, 0, 0, 0, 1, 0, 0, 0, -1];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('270 degree rotation', () => {
-            const rm = r(degrees270);
-            const expected = [0, 0, -1, 0, 1, 0, 1, 0, 0];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('360 degree rotation', () => {
-            const rm = r(degrees360);
-            const expected = [1, 0, 0, 0, 1, 0, 0, 0, 1];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
+          const expectedValues = [
+            [0, 0, 1, 0, 1, 0, -1, 0, 0],
+            [-1, 0, 0, 0, 1, 0, 0, 0, -1],
+            [0, 0, -1, 0, 1, 0, 1, 0, 0],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1]
+          ];
+          for (let test = 0; test < degrees.length; test++) {
+            rotation3DTest(test, r, degrees, expectedValues);
+          }
         });
         describe('rotationZ', () => {
           const r = Matrix.rotationZ(3);
-          it('90 degree rotation', () => {
-            const rm = r(degrees90);
-            const expected = [0, -1, 0, 1, 0, 0, 0, 0, 1];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('180 degree rotation', () => {
-            const rm = r(degrees180);
-            const expected = [-1, 0, 0, 0, -1, 0, 0, 0, 1];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('270 degree rotation', () => {
-            const rm = r(degrees270);
-            const expected = [0, 1, 0, -1, 0, 0, 0, 0, 1];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
-          it('360 degree rotation', () => {
-            const rm = r(degrees360);
-            const expected = [1, 0, 0, 0, 1, 0, 0, 0, 1];
-            let index = 0;
-            for (const value of rm) {
-              expect(value).toBeCloseTo(expected[index++], precision);
-            }
-          });
+          const expectedValues = [
+            [0, -1, 0, 1, 0, 0, 0, 0, 1],
+            [-1, 0, 0, 0, -1, 0, 0, 0, 1],
+            [0, 1, 0, -1, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1]
+          ];
+          for (let test = 0; test < degrees.length; test++) {
+            rotation3DTest(test, r, degrees, expectedValues);
+          }
         });
       });
     });
@@ -197,28 +143,100 @@ describe('Matrix', () => {
   });
 
   it('matrix has an iterator', () => {
-    const expectedValues = [];
+    const expected = [];
     for (let i = 0; i < m.rows; i++) {
       for (let j = 0; j < m.cols; j++) {
-        expectedValues.push(m.get(i, j));
+        expected.push(m.get(i, j));
       }
     }
-    let count = 0;
+    let index = 0;
     for (const value of m) {
-      expect(value).toBe(expectedValues[count]);
-      count++;
+      expect(value).toBe(expected[index++]);
     }
-    expect(count).toBe(m.rows * m.cols);
+    expect(index).toBe(m.rows * m.cols);
   });
 
-  //    static rotation(
-  //    static rotationX(angle: number, dimension: number = 3): Matrix {
-  //    static rotationY(angle: number, dimension: number = 3): Matrix {
-  //    static rotationZ(angle: number, dimension: number = 3): Matrix {
-  //    public add(...ms: Matrix[]): Matrix {
-  //    public subtract(...ms: Matrix[]): Matrix {
-  //    public scalarMult(c: number): Matrix {
-  //    public transpose(): Matrix {
+  describe('add', () => {
+    it('two matrices', () => {
+      const expected = [0, 2, 4, 6, 8, 10];
+      let index = 0;
+      for (const value of m.add(m)) {
+        expect(value).toBe(expected[index++]);
+      }
+    });
+    it('multiple matrices', () => {
+      const expected = [0, 3, 6, 9, 12, 15];
+      let index = 0;
+      for (const value of m.add(m, m)) {
+        expect(value).toBe(expected[index++]);
+      }
+    });
+  });
+
+  describe('subtract', () => {
+    it('two matrices', () => {
+      const expected = [0, 0, 0, 0, 0, 0];
+      let index = 0;
+      for (const value of m.subtract(m)) {
+        expect(value).toBe(expected[index++]);
+      }
+    });
+    it('multiple matrices', () => {
+      const expected = [0, -1, -2, -3, -4, -5];
+      let index = 0;
+      for (const value of m.subtract(m, m)) {
+        expect(value).toBe(expected[index++]);
+      }
+    });
+  });
+
+  describe('scalarMult', () => {
+    it('one value', () => {
+      const expected = [0, 10, 20, 30, 40, 50];
+      let index = 0;
+      for (const value of m.scalarMult(10)) {
+        expect(value).toBe(expected[index++]);
+      }
+    });
+    it('multiple values', () => {
+      const expected = [0, 10, 20, 30, 40, 50];
+      let index = 0;
+      for (const value of m.scalarMult(2, 5)) {
+        expect(value).toBe(expected[index++]);
+      }
+    });
+  });
+
+  it('transpose', () => {
+    const expected = [0, 3, 1, 4, 2, 5];
+    let index = 0;
+    for (const value of m.transpose()) {
+      expect(value).toBe(expected[index++]);
+    }
+  });
+
+  describe('mult', () => {
+    it('error', () => {
+      expect(() => m.mult(m)).toThrow(
+        new Error('Matrices are not the right dimensions: a:2x3 b:2x3')
+      );
+    });
+    it('one value', () => {
+      const expected = [5, 14, 14, 50];
+      let index = 0;
+      for (const value of m.mult(m.transpose())) {
+        expect(value).toBe(expected[index++]);
+      }
+    });
+    // it('multiple values', () => {
+    //   const expected = [0, 10, 20, 30, 40, 50];
+    //   let index = 0;
+    //   for (const value of m.mult(2, 5)) {
+    //     expect(value).toBe(expected[index++]);
+    //   }
+    // });
+  });
+
   //    public mult(...ms: Matrix[]): Matrix {
   //    public copy(): Matrix {
 });

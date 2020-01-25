@@ -108,7 +108,8 @@ export class Matrix implements Iterable<number> {
 
     return diff.subtract(...dropFirst(ms));
   }
-  public scalarMult(c: number): Matrix {
+  public scalarMult(...cs: number[]): Matrix {
+    const c = cs.reduce((acc, v) => acc * v, 1);
     return new Matrix(this.values.map(v => Vector.mult(v, c)));
   }
   public transpose(): Matrix {
@@ -140,7 +141,7 @@ export class Matrix implements Iterable<number> {
     for (let i = 0; i < this.rows; i++) {
       c[i] = [];
       for (let j = 0; j < b.cols; j++) {
-        c[i][j] = Vector.dotProduct(this.values[i], bt.get(i));
+        c[i][j] = Vector.dotProduct(this.values[i], bt.get(j));
       }
     }
 

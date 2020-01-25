@@ -18,7 +18,7 @@ export declare class Matrix implements Iterable<number> {
     get(row: number, col: number): number;
     add(...ms: Matrix[]): Matrix;
     subtract(...ms: Matrix[]): Matrix;
-    scalarMult(c: number): Matrix;
+    scalarMult(...cs: number[]): Matrix;
     transpose(): Matrix;
     mult(...ms: Matrix[]): Matrix;
     copy(): Matrix;
