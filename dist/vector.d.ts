@@ -12,11 +12,10 @@ export declare class Vector implements Iterable<number> {
     private _magnitude?;
     /**
      * Creates a Vector from the given values.
-     * @param x - x value
-     * @param others - other values e.g. y, z
+     * @param values - vector values e.g. x, y, z
      * @returns A new Vector
      */
-    static create(x?: number, ...others: number[]): Vector;
+    static create(...values: number[]): Vector;
     /**
      * Fills a Vector with a given value `c`.
      * @param c - value to fill with
@@ -30,6 +29,67 @@ export declare class Vector implements Iterable<number> {
      * @returns A new Vector
      */
     static random2D(magnitude?: number): Vector;
+    /**
+     * The angle θ between a vector and the x-axis such that −π < θ ≤ π.
+     */
+    static heading(vector: ReadonlyArray<number>): number;
+    /**
+     * A normalized version of this vector.
+     * @returns A copy of this vector with magnitude === 1
+     */
+    static normalize(vector: ReadonlyArray<number>): number[];
+    /**
+     * Rotates this vector by `angle` radians.
+     * @param angle - the angle with which to rotate in radians
+     * @returns A copy of this vector rotated by `angle`
+     */
+    static rotate(vector: ReadonlyArray<number>, angle: number): number[];
+    /**
+     * The magnitude of a vector, i.e. size.
+     */
+    static getMag(vector: ReadonlyArray<number>): number;
+    /**
+     * Sets the magnitude of this vector to a given value.
+     * @param magnitude - the value with which to set the magnitude
+     * @returns A copy of this vector with the given magnitude
+     */
+    static setMag(vector: ReadonlyArray<number>, magnitude: number): number[];
+    /**
+     * Limits a this vectors magnitude by the given amount.
+     * @param maxMagnitude - the maximum magnitude allowed
+     * @returns A vector with a magnitude less than or equal to `max`
+     */
+    static limit(vector: ReadonlyArray<number>, maxMagnitude: number): ReadonlyArray<number> | number[];
+    /**
+     * Calculates the distance between two vectors.
+     * @param other - the other vector
+     * @returns The distance between this vector and `other`
+     */
+    static dist(vector: ReadonlyArray<number>, other: ReadonlyArray<number>): number;
+    /**
+     * Calculates the sum of this vector and another.
+     * @param vs - the vector(s) with which to add (addends)
+     * @returns The summation of this vector and `vs`
+     */
+    static add(...vs: Array<ReadonlyArray<number>>): ReadonlyArray<number>;
+    /**
+     * Calculates the difference between this vector and another.
+     * @param vs - the vector(s) with which to subtract (subtrahends)
+     * @returns The difference between this vector and `vs`
+     */
+    static subtract(...vs: Array<ReadonlyArray<number>>): ReadonlyArray<number> | number[];
+    /**
+     * Multiplies this vector by a scalar (scalar multiplication).
+     * @param ns - the values with which to multiply
+     * @returns A copy of this vector scaled by `n` and `ns`
+     */
+    static mult(vector: ReadonlyArray<number>, ...ns: ReadonlyArray<number>): number[];
+    /**
+     * Calculates the dot product of this vector and another (scalar product).
+     * @param other - the other vector with which to calculate the dot product
+     * @returns The dot product
+     */
+    static dotProduct(vector: ReadonlyArray<number>, other: ReadonlyArray<number>): number;
     private constructor();
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -42,6 +102,7 @@ export declare class Vector implements Iterable<number> {
      * @returns the value at `index`
      */
     get(index: number): number;
+    toArray(): number[];
     /**
      * The magnitude of this Vector, i.e. size.
      */
@@ -82,7 +143,7 @@ export declare class Vector implements Iterable<number> {
      * @param magnitude - the value with which to set the magnitude
      * @returns A copy of this Vector with the given magnitude
      */
-    setMag(magnitude?: number): Vector;
+    setMag(magnitude: number): Vector;
     /**
      * Limits a this Vectors magnitude by the given amount.
      * @param maxMagnitude - the maximum magnitude allowed
@@ -109,11 +170,10 @@ export declare class Vector implements Iterable<number> {
     subtract(...vs: Vector[]): Vector;
     /**
      * Multiplies this Vector by a scalar (scalar multiplication).
-     * @param n - the first value with which to multiply
-     * @param ns - the remaining values with which to multiply
+     * @param ns - the values with which to multiply
      * @returns A copy of this Vector scaled by `n` and `ns`
      */
-    mult(n: number, ...ns: number[]): Vector;
+    mult(...ns: number[]): Vector;
     /**
      * @returns A copy of this Vector.
      */

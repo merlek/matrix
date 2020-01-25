@@ -1,5 +1,5 @@
 import { dropFirst, repeat } from 'utility-functions';
-import { toRadians, Vector } from './vector';
+import { Vector } from './vector';
 
 function dimensionsError(a: Matrix, b: Matrix) {
   throw Error(
@@ -25,9 +25,8 @@ function identity2dArray(dimension: number): number[][] {
 }
 
 export class Matrix {
-  private readonly values: ReadonlyArray<Vector>;
   static create(values: number[][]): Matrix {
-    return new Matrix(values.map(v => Vector.create(...v)));
+    return new Matrix(values.map(v => [...v]));
   }
   static identity(dimension: number): Matrix {
     return Matrix.create(identity2dArray(dimension));
@@ -57,23 +56,22 @@ export class Matrix {
   static rotationZ(dimension: number): (angle: number) => Matrix {
     return Matrix.rotation(dimension, 0, 1);
   }
-  private constructor(values: Vector[]) {
-    this.values = values.map(v => v.copy());
-  }
+  private constructor(
+    private readonly values: ReadonlyArray<ReadonlyArray<number>>
+  ) {}
   get m(): number {
     return this.values.length;
   }
   get n(): number {
     return this.values[0].length;
   }
-  public get(i: number): Vector;
+  public get(i: number): ReadonlyArray<number>;
   public get(i: number, j: number): number;
-  public get(i: number, j?: number): Vector | number {
-    const vector = this.values[i];
+  public get(i: number, j?: number): ReadonlyArray<number> | number {
     if (j == null) {
-      return vector;
+      return this.values[i];
     } else {
-      return vector.get(j);
+      return this.values[i][j];
     }
   }
   public add(...ms: Matrix[]): Matrix {
@@ -87,7 +85,9 @@ export class Matrix {
       throw dimensionsError(this, b);
     }
 
-    const sum = new Matrix(this.values.map((v, i) => v.add(b.get(i))));
+    const sum = new Matrix(
+      this.values.map((v, i) => Vector.add(v, b.get(i)))
+    );
 
     return sum.add(...dropFirst(ms));
   }
@@ -101,7 +101,7 @@ export class Matrix {
     return diff.subtract(...dropFirst(ms));
   }
   public scalarMult(c: number): Matrix {
-    return new Matrix(this.values.map(v => v.mult(c)));
+    return new Matrix(this.values.map(v => Vector.mult(v, c)));
   }
   public transpose(): Matrix {
     const values: number[][] = [];
@@ -132,7 +132,7 @@ export class Matrix {
     for (let i = 0; i < this.m; i++) {
       c[i] = [];
       for (let j = 0; j < b.n; j++) {
-        c[i][j] = this.values[i].dotProduct(bt.get(j));
+        c[i][j] = Vector.dotProduct(this.values[i], bt.get(i));
       }
     }
 
@@ -140,31 +140,6 @@ export class Matrix {
   }
 
   public copy(): Matrix {
-    return new Matrix(this.values.map(v => v.copy()));
+    return new Matrix(this.values.map(v => [...v]));
   }
-  //   static fromVector(v: Vector): Matrix {
-  //     return MatrixMath.transpose([v]);
-  //   }
-  //   static sumVector(m: Matrix, ...vs: Vector[]): Matrix {
-  //     const c: Matrix = [];
-
-  //     const mt = MatrixMath.transpose(m);
-
-  //     for (let i = 0; i < mt.length; i++) {
-  //       c[i] = VectorMath.sum(mt[i], ...vs);
-  //     }
-
-  //     return MatrixMath.transpose(c);
-  //   }
-  //   static subtractVector(m: Matrix, ...vs: Vector[]): Matrix {
-  //    const c: Matrix = [];
-
-  //    const mt = MatrixMath.transpose(m);
-
-  //    for (let i = 0; i < mt.length; i++) {
-  //      c[i] = VectorMath.subtract(mt[i], ...vs);
-  //    }
-
-  //    return MatrixMath.transpose(c);
-  //  }
 }

@@ -1,4 +1,3 @@
-import { Vector } from './vector';
 export declare class Matrix {
     private readonly values;
     static create(values: number[][]): Matrix;
@@ -10,7 +9,7 @@ export declare class Matrix {
     private constructor();
     get m(): number;
     get n(): number;
-    get(i: number): Vector;
+    get(i: number): ReadonlyArray<number>;
     get(i: number, j: number): number;
     add(...ms: Matrix[]): Matrix;
     subtract(...ms: Matrix[]): Matrix;

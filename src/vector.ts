@@ -13,16 +13,14 @@ export function toRadians(degrees: number): number {
  * An immutable mathmatical vector.
  */
 export class Vector implements Iterable<number> {
-  private readonly values: ReadonlyArray<number>;
   private _magnitude?: number;
   /**
    * Creates a Vector from the given values.
-   * @param x - x value
-   * @param others - other values e.g. y, z
+   * @param values - vector values e.g. x, y, z
    * @returns A new Vector
    */
-  static create(x: number = 0, ...others: number[]): Vector {
-    return new Vector(x, ...others);
+  static create(...values: number[]): Vector {
+    return new Vector(values);
   }
   /**
    * Fills a Vector with a given value `c`.
@@ -31,7 +29,7 @@ export class Vector implements Iterable<number> {
    * @returns A new Vector
    */
   static fill(c: number, length: number): Vector {
-    return new Vector(...repeat(c)(length));
+    return new Vector(repeat(c)(length));
   }
   /**
    * Creates a random 2D Vector.
@@ -39,10 +37,134 @@ export class Vector implements Iterable<number> {
    * @returns A new Vector
    */
   static random2D(magnitude?: number): Vector {
-    return new Vector(1, 0).rotate(random(0)(Math.PI * 2)).setMag(magnitude);
+    const v = new Vector([1, 0]).rotate(random(0)(Math.PI * 2));
+    return magnitude != null ? v.setMag(magnitude) : v;
   }
-  private constructor(...values: number[]) {
-    this.values = [...values];
+  /**
+   * The angle θ between a vector and the x-axis such that −π < θ ≤ π.
+   */
+  static heading(vector: ReadonlyArray<number>): number {
+    return Math.atan2(vector[1], vector[0]);
+  }
+  /**
+   * A normalized version of this vector.
+   * @returns A copy of this vector with magnitude === 1
+   */
+  static normalize(vector: ReadonlyArray<number>): number[] {
+    return Vector.setMag(vector, 1);
+  }
+  /**
+   * Rotates this vector by `angle` radians.
+   * @param angle - the angle with which to rotate in radians
+   * @returns A copy of this vector rotated by `angle`
+   */
+  static rotate(vector: ReadonlyArray<number>, angle: number): number[] {
+    return [
+      vector[0] * Math.cos(angle) - vector[1] * Math.sin(angle),
+      vector[0] * Math.sin(angle) + vector[1] * Math.cos(angle)
+    ];
+  }
+  /**
+   * The magnitude of a vector, i.e. size.
+   */
+  static getMag(vector: ReadonlyArray<number>): number {
+    return Math.sqrt(vector.reduce((acc, value) => acc + value * value, 0));
+  }
+  /**
+   * Sets the magnitude of this vector to a given value.
+   * @param magnitude - the value with which to set the magnitude
+   * @returns A copy of this vector with the given magnitude
+   */
+  static setMag(vector: ReadonlyArray<number>, magnitude: number): number[] {
+    const mag = Vector.getMag(vector);
+    return vector.map(v => (v / mag) * magnitude);
+  }
+  /**
+   * Limits a this vectors magnitude by the given amount.
+   * @param maxMagnitude - the maximum magnitude allowed
+   * @returns A vector with a magnitude less than or equal to `max`
+   */
+  static limit(
+    vector: ReadonlyArray<number>,
+    maxMagnitude: number
+  ): ReadonlyArray<number> | number[] {
+    return Vector.getMag(vector) > maxMagnitude
+      ? Vector.setMag(vector, maxMagnitude)
+      : vector;
+  }
+  /**
+   * Calculates the distance between two vectors.
+   * @param other - the other vector
+   * @returns The distance between this vector and `other`
+   */
+  static dist(
+    vector: ReadonlyArray<number>,
+    other: ReadonlyArray<number>
+  ): number {
+    return Math.sqrt(
+      vector.reduce(
+        (acc, value, index) => acc + Math.pow(other[index] - value, 2),
+        0
+      )
+    );
+  }
+  /**
+   * Calculates the sum of this vector and another.
+   * @param vs - the vector(s) with which to add (addends)
+   * @returns The summation of this vector and `vs`
+   */
+  static add(...vs: Array<ReadonlyArray<number>>): ReadonlyArray<number> {
+    if (vs.length <= 1) {
+      return vs.length === 1 ? vs[0] : [];
+    }
+
+    const a = vs[0];
+    const b = Vector.add(...dropFirst(vs));
+
+    return a.map((v, i) => v + b[i]);
+  }
+  /**
+   * Calculates the difference between this vector and another.
+   * @param vs - the vector(s) with which to subtract (subtrahends)
+   * @returns The difference between this vector and `vs`
+   */
+  static subtract(
+    ...vs: Array<ReadonlyArray<number>>
+  ): ReadonlyArray<number> | number[] {
+    if (vs.length <= 1) {
+      return vs.length === 1 ? vs[0] : [];
+    }
+
+    const a = vs[0];
+    const b = Vector.add(...dropFirst(vs));
+
+    return a.map((v, i) => v - b[i]);
+  }
+  /**
+   * Multiplies this vector by a scalar (scalar multiplication).
+   * @param ns - the values with which to multiply
+   * @returns A copy of this vector scaled by `n` and `ns`
+   */
+  static mult(
+    vector: ReadonlyArray<number>,
+    ...ns: ReadonlyArray<number>
+  ): number[] {
+    const n = ns.length === 1 ? ns[0] : ns.reduce((acc, c) => acc * c, 1);
+    return vector.map(v => v * n);
+  }
+  /**
+   * Calculates the dot product of this vector and another (scalar product).
+   * @param other - the other vector with which to calculate the dot product
+   * @returns The dot product
+   */
+  static dotProduct(
+    vector: ReadonlyArray<number>,
+    other: ReadonlyArray<number>
+  ): number {
+    return vector.reduce((acc, value, i) => acc + value * other[i], 0);
+  }
+  private constructor(private readonly values: ReadonlyArray<number>) {
+    this.values = values;
   }
   [Symbol.iterator](): IterableIterator<number> {
     return this.getIterator();
@@ -61,21 +183,22 @@ export class Vector implements Iterable<number> {
   public get(index: number) {
     return this.values[index];
   }
+  public toArray(): number[] {
+    return [...this.values];
+  }
   /**
    * The magnitude of this Vector, i.e. size.
    */
   get magnitude(): number {
     return this._magnitude != null
       ? this._magnitude
-      : (this._magnitude = Math.sqrt(
-          this.values.reduce((acc, value) => acc + Math.pow(value, 2), 0)
-        ));
+      : (this._magnitude = Vector.getMag(this.values));
   }
   /**
    * The angle θ between this Vector and the x-axis such that −π < θ ≤ π.
    */
   get heading(): number {
-    return Math.atan2(this.y, this.x);
+    return Vector.heading(this.values);
   }
   /**
    * The number of values in this Vector, e.g. 2D => length === 2.
@@ -114,20 +237,15 @@ export class Vector implements Iterable<number> {
    * @returns A copy of this Vector rotated by `angle`
    */
   public rotate(angle: number): Vector {
-    return new Vector(
-      this.x * Math.cos(angle) - this.y * Math.sin(angle),
-      this.x * Math.sin(angle) + this.y * Math.cos(angle)
-    );
+    return new Vector(Vector.rotate(this.values, angle));
   }
   /**
    * Sets the magnitude of this Vector to a given value.
    * @param magnitude - the value with which to set the magnitude
    * @returns A copy of this Vector with the given magnitude
    */
-  public setMag(magnitude?: number): Vector {
-    return magnitude != null
-      ? new Vector(...this.values.map(v => (v / this.magnitude) * magnitude))
-      : this;
+  public setMag(magnitude: number): Vector {
+    return new Vector(Vector.mult(this.values, magnitude / this.magnitude));
   }
   /**
    * Limits a this Vectors magnitude by the given amount.
@@ -143,12 +261,7 @@ export class Vector implements Iterable<number> {
    * @returns The distance between this Vector and `other`
    */
   public dist(other: Vector): number {
-    return Math.sqrt(
-      this.values.reduce(
-        (acc, value, index) => acc + Math.pow(other.values[index] - value, 2),
-        0
-      )
-    );
+    return Vector.dist(this.values, other.values);
   }
   /**
    * Calculates the sum of this Vector and another.
@@ -159,10 +272,7 @@ export class Vector implements Iterable<number> {
     if (vs.length < 1) {
       return this;
     }
-
-    const sum = new Vector(...this.values.map((v, i) => v + vs[0].values[i]));
-
-    return sum.add(...dropFirst(vs));
+    return new Vector(Vector.add(this.values, ...vs.map(v => v.values)));
   }
   /**
    * Calculates the difference between this Vector and another.
@@ -173,26 +283,21 @@ export class Vector implements Iterable<number> {
     if (vs.length < 1) {
       return this;
     }
-
-    const diff = this.add(vs[0].mult(-1));
-
-    return diff.subtract(...dropFirst(vs));
+    return new Vector(Vector.subtract(this.values, ...vs.map(v => v.values)));
   }
   /**
    * Multiplies this Vector by a scalar (scalar multiplication).
-   * @param n - the first value with which to multiply
-   * @param ns - the remaining values with which to multiply
+   * @param ns - the values with which to multiply
    * @returns A copy of this Vector scaled by `n` and `ns`
    */
-  public mult(n: number, ...ns: number[]): Vector {
-    n *= ns.length > 0 ? ns.reduce((acc, c) => acc * c, 1) : 1;
-    return new Vector(...this.values.map(v => v * n));
+  public mult(...ns: number[]): Vector {
+    return new Vector(Vector.mult(this.values, ...ns));
   }
   /**
    * @returns A copy of this Vector.
    */
   public copy(): Vector {
-    return new Vector(...this.values);
+    return new Vector(this.values);
   }
   /**
    * Calculates the dot product of this Vector and another (scalar product).
@@ -200,9 +305,6 @@ export class Vector implements Iterable<number> {
    * @returns The dot product
    */
   public dotProduct(other: Vector): number {
-    return this.values.reduce(
-      (acc, value, i) => acc + value * other.values[i],
-      0
-    );
+    return Vector.dotProduct(this.values, other.values);
   }
 }

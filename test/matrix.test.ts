@@ -60,11 +60,6 @@ describe('Matrix', () => {
     });
   });
 
-  it('matrix.get(i) is a Vector column', () => {
-    console.log(ident);
-    expect(ident.get(0) instanceof Vector).toBeTrue();
-  });
-
   //    static rotation(
   //    static rotationX(angle: number, dimension: number = 3): Matrix {
   //    static rotationY(angle: number, dimension: number = 3): Matrix {

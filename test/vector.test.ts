@@ -41,6 +41,15 @@ describe('Vector', () => {
     });
   });
 
+  it('vector values are immutable', () => {
+    const values = [0, 0];
+    const vec = Vector.create(...values);
+    values[0] = 1;
+    expect(vec.x).toBe(0);
+    vec.toArray()[0] = 1;
+    expect(vec.x).toBe(0);
+  });
+
   it('vector has an iterator', () => {
     for (const value of zero) {
       expect(value).toBe(0);
