@@ -10,7 +10,7 @@ export class VectorIterator implements IterableIterator<number> {
   next(): IteratorResult<number> {
     return {
       value: this.vector.get(this.index++),
-      done: this.index >= this.vector.length
+      done: this.index > this.vector.length
     };
   }
 }

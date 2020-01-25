@@ -51,9 +51,12 @@ describe('Vector', () => {
   });
 
   it('vector has an iterator', () => {
+     let count = 0;
     for (const value of zero) {
       expect(value).toBe(0);
+      count++;
     }
+    expect(count).toBe(2);
   });
 
   it('length returns length of a vector', () => {

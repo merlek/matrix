@@ -1,6 +1,5 @@
-import { random, randomInt, range } from 'utility-functions';
-import { toRadians, Vector } from '../src/vector';
 import { Matrix } from '../src/matrix';
+import { toRadians } from '../src/vector';
 
 const precision = 9;
 
@@ -10,9 +9,8 @@ describe('Matrix', () => {
   const min = -100;
 
   const m = Matrix.create([
-    [randomInt(min)(max), randomInt(min)(max), randomInt(min)(max)],
-    [randomInt(min)(max), randomInt(min)(max), randomInt(min)(max)],
-    [randomInt(min)(max), randomInt(min)(max), randomInt(min)(max)]
+    [0, 1, 2],
+    [3, 4, 5]
   ]);
 
   const ident = Matrix.identity(3);
@@ -24,8 +22,8 @@ describe('Matrix', () => {
 
   describe('static', () => {
     it('identity creates a new identity Matrix', () => {
-      for (let i = 0; i < ident.m; i++) {
-        for (let j = 0; j < ident.n; j++) {
+      for (let i = 0; i < ident.rows; i++) {
+        for (let j = 0; j < ident.cols; j++) {
           if (i === j) {
             expect(ident.get(i, j)).toBe(1);
           } else {
@@ -34,30 +32,80 @@ describe('Matrix', () => {
         }
       }
     });
-    describe('rotation (2D)', () => {
-      const r = Matrix.rotation();
-      it('90 degree rotation', () => {
-        const rm = r(toRadians(90));
-        expect(rm.get(0, 0)).toBeCloseTo(0);
-        expect(rm.get(1, 0)).toBeCloseTo(-1);
-        expect(rm.get(0, 1)).toBeCloseTo(1);
-        expect(rm.get(1, 1)).toBeCloseTo(0);
+    describe('rotations', () => {
+      describe('2D', () => {
+        const r = Matrix.rotation();
+        it('90 degree rotation', () => {
+          const rm = r(toRadians(90));
+          expect(rm.get(0, 0)).toBeCloseTo(0);
+          expect(rm.get(1, 0)).toBeCloseTo(-1);
+          expect(rm.get(0, 1)).toBeCloseTo(1);
+          expect(rm.get(1, 1)).toBeCloseTo(0);
+        });
+        it('180 degree rotation', () => {
+          const rm = r(toRadians(180));
+          expect(rm.get(0, 0)).toBeCloseTo(-1);
+          expect(rm.get(1, 0)).toBeCloseTo(0);
+          expect(rm.get(0, 1)).toBeCloseTo(0);
+          expect(rm.get(1, 1)).toBeCloseTo(-1);
+        });
+        it('270 degree rotation', () => {
+          const rm = r(toRadians(270));
+          expect(rm.get(0, 0)).toBeCloseTo(0);
+          expect(rm.get(1, 0)).toBeCloseTo(1);
+          expect(rm.get(0, 1)).toBeCloseTo(-1);
+          expect(rm.get(1, 1)).toBeCloseTo(0);
+        });
+        it('360 degree rotation', () => {
+          const rm = r(toRadians(360));
+          expect(rm.get(0, 0)).toBeCloseTo(1);
+          expect(rm.get(1, 0)).toBeCloseTo(0);
+          expect(rm.get(0, 1)).toBeCloseTo(0);
+          expect(rm.get(1, 1)).toBeCloseTo(1);
+        });
       });
-      it('180 degree rotation', () => {
-        const rm = r(toRadians(180));
-        expect(rm.get(0, 0)).toBeCloseTo(-1);
-        expect(rm.get(1, 0)).toBeCloseTo(0);
-        expect(rm.get(0, 1)).toBeCloseTo(0);
-        expect(rm.get(1, 1)).toBeCloseTo(-1);
-      });
-      it('270 degree rotation', () => {
-        const rm = r(toRadians(270));
-        expect(rm.get(0, 0)).toBeCloseTo(0);
-        expect(rm.get(1, 0)).toBeCloseTo(1);
-        expect(rm.get(0, 1)).toBeCloseTo(-1);
-        expect(rm.get(1, 1)).toBeCloseTo(0);
+      describe('3D', () => {
+        it('rotationX 90 degree rotation', () => {
+          const rm = Matrix.rotationX(3)(toRadians(90));
+          // expect(rm.get(0, 0)).toBeCloseTo(0);
+          // expect(rm.get(1, 0)).toBeCloseTo(-1);
+          // expect(rm.get(0, 1)).toBeCloseTo(1);
+          // expect(rm.get(1, 1)).toBeCloseTo(0);
+        });
       });
     });
+  });
+
+  it('a 2x3 matrix has 2 rows', () => {
+    expect(m.rows).toBe(2);
+  });
+
+  it('a 2x3 matrix has 3 cols', () => {
+    expect(m.cols).toBe(3);
+  });
+
+  it('get(i,j) returns matrix[i,j]', () => {
+    expect(m.get(0, 0)).toBe(0);
+    expect(m.get(0, 1)).toBe(1);
+    expect(m.get(0, 2)).toBe(2);
+    expect(m.get(1, 0)).toBe(3);
+    expect(m.get(1, 1)).toBe(4);
+    expect(m.get(1, 2)).toBe(5);
+  });
+
+  it('matrix has an iterator', () => {
+    const expectedValues = [];
+    for (let i = 0; i < m.rows; i++) {
+      for (let j = 0; j < m.cols; j++) {
+        expectedValues.push(m.get(i, j));
+      }
+    }
+    let count = 0;
+    for (const value of m) {
+      expect(value).toBe(expectedValues[count]);
+      count++;
+    }
+    expect(count).toBe(m.rows * m.cols);
   });
 
   //    static rotation(
