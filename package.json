@@ -30,6 +30,10 @@
       "matrices",
       "math"
    ],
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/merlek/matrix.git"
+   },
    "author": "merlek",
    "license": "MIT",
    "dependencies": {
